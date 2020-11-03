@@ -1,0 +1,79 @@
+const inputStart = $(#start-date);
+const inputReturn = $(#return-date);
+const select = $(select);
+const book = $(#book);
+
+function invalidate(input) {
+  input.style.set { background: "red" };
+  book.state.disabled = true;
+}
+
+function validate(input) {
+  const value = input.value;
+  if (/[^\d\.]/.test(value)) {
+    invalidate(input);
+    return false;
+  }
+  try {
+    const [day, month, year] = value.split('.').map(|n| n.toInteger());
+    const date = new Date(year, month, day);
+
+    if (select.value == 'return flight') {
+      const value2 = (input == inputStart ? inputReturn.value : inputStart.value);
+      const [day2, month2, year2] = value2.split('.').map(|n| n.toInteger());
+      const date2 = new Date(year2, month2, day2);
+
+      if (Date.diff(date, date2, #days) >= 1) {
+        invalidate(input);
+        return false;
+      }
+    }
+  } catch (e) {
+    invalidate(input);
+    return false;
+  }
+  input.style.set { background: "white" };
+  return true;
+}
+
+inputStart << event change {
+  validate(inputStart);
+  if (select.value == 'one-way flight' && inputStart.style.background == "white") {
+    book.state.disabled = false;
+    return;
+  }
+  inputReturn.style.background == "red" && (inputStart.style.background = "red");
+  inputStart.style.background == "red" && (inputReturn.style.background = "red");
+  if (inputReturn.style.background == "white" && inputStart.style.background == "white") {
+    book.state.disabled = false;
+  }
+}
+
+inputReturn << event change {
+  validate(inputReturn);
+  inputReturn.style.background == "red" && (inputStart.style.background = "red");
+  inputStart.style.background == "red" && (inputReturn.style.background = "red");
+  if (inputReturn.style.background == "white" && inputStart.style.background == "white") {
+    book.state.disabled = false;
+  }
+}
+
+select << event change {
+  switch (select.value) {
+    case 'one-way flight': {
+      inputReturn.state.disabled = true;
+      break;
+    }
+    case 'return flight': {
+      inputReturn.state.disabled = false;
+      break;
+    }
+  }
+}
+
+book << event click {
+  const message = (select.value == 'one-way flight')
+  ? String.$(You have booked a one-way flight on {inputStart.value}.)
+  : String.$(You have booked flights to and from on {inputStart.value} and {inputReturn.value}.);
+  view.msgbox(message);
+}
