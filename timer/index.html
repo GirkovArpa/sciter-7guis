@@ -1,0 +1,22 @@
+<html window-resizable=false>
+
+  <head>
+    <title>Timer</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="../common.tis"></script>
+    <script src="script.tis"></script>
+  </head>
+
+  <body>
+    <label>Elapsed time:</label>
+    <input|progress value=0>
+
+    <label.wide>0.0s / 30s</label>
+
+    <label>Duration:</label>
+    <input|hslider min="0" max="30" step="1" value="30"/>
+
+    <button.reset>Reset</button>
+  </body>
+
+</html>

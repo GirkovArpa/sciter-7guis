@@ -1,0 +1,35 @@
+const slider = $([type=hslider]);
+const label = $(.wide);
+const progress = $([type=progress]);
+const reset = $(button.reset);
+
+let DURATION = 0.0;
+let TARGET = 30;
+
+function formatDuration(duration) {
+  const duration_string = duration.toString();
+  const index = duration_string.indexOf('.');
+  return duration_string.slice(0, index + 2);
+}
+
+function updateProgressBar() {
+  progress.value = Float.min(formatDuration(DURATION).toFloat() / TARGET, 1);
+}
+
+reset << event click {
+   DURATION = 0.0;
+}
+
+slider << event change {
+  TARGET = slider.value;
+  label.value = String.$({formatDuration(DURATION)}s / {TARGET}s);
+  updateProgressBar();
+};
+
+view.root.timer(100ms, function() {
+  if (formatDuration(DURATION).toFloat() >= TARGET) return true;
+  DURATION += 0.1;
+  label.value = String.$({formatDuration(DURATION)}s / {TARGET}s);
+  updateProgressBar();
+  return true;
+});
