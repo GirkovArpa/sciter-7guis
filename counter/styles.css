@@ -4,6 +4,7 @@
 }
 
 body {
+  width: 200dip;
   flow: horizontal; 
   border-spacing: *;
   vertical-align: middle; 

@@ -1,40 +1,34 @@
-# SciterJS 7GUIs
+# Sciter 7GUIs
 
-[7GUIs](https://eugenkiss.github.io/7guis/tasks) benchmarks implemented in [SciterJS](https://sciter.com).
+[7GUIs](https://eugenkiss.github.io/7guis/tasks) benchmarks implemented in [Sciter](https://github.com/c-smile/sciter-sdk).
 
-Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter-js-sdk/tree/main/bin.win/x32) in this folder and running the appropriate `.bat` file.
-_____________
-At the time of this writing, the `x32` version seems to support things the `x64` version does not.  And the *"work in progress"* benchmarks are halted because JavaScript features they require are not yet implemented in SciterJS (`11/2/2020`).
+Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter-sdk/tree/master/bin.win/x64) in this folder and running the appropriate `.bat` file.
 
 ## Counter
 
-![screenshot](screenshots/counter.gif)
+:construction: Not yet implemented. :construction:
 
 ## Temperature Converter
 
-![screenshot](screenshots/temperature-converter.gif)
+:construction: Not yet implemented. :construction:
 
 ## Flight Booker
 
-:construction: Work in progress. :construction:
-
-![screenshot](screenshots/flight-booker.gif)
+:construction: Not yet implemented. :construction:
 
 ## Timer
 
-![screenshot](screenshots/timer.gif)
+:construction: Not yet implemented. :construction:
 
 ## CRUD
 
-:construction: Work in progress. :construction:
+:construction: Not yet implemented. :construction:
 
 ![screenshot](screenshots/crud.png)
 
 ## Circle Drawer
 
-:construction: Work in progress. :construction:
-
-![screenshot](screenshots/circle-drawer.png)
+:construction: Not yet implemented. :construction:
 
 ## Cells
 
