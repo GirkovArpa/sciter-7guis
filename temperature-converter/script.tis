@@ -1,0 +1,14 @@
+const celsius = $([name=celsius]);
+const farenheight = $([name=farenheight]);
+
+function fToC(F) {
+  return (F - 32) * 5 / 9;
+}
+
+function cToF(C) {
+  return C * 9 / 5 + 32;
+}
+
+celsius.on('change', :: farenheight.value = cToF(celsius.value));
+
+farenheight.on('change', :: celsius.value = fToC(farenheight.value));
