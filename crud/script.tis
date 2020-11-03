@@ -1,0 +1,71 @@
+const prefix = $(#prefix);
+const list = $(select);
+
+const create = $(#create);
+const update = $(#update);
+const remove = $(#delete);
+
+const firstName = $(#firstname);
+const lastName = $(#lastname);
+
+list.value = "Tisch, Roman";
+
+function maybeDisableButtons() {
+  update.state.disabled = true;
+  remove.state.disabled = true;
+}
+
+function enabledButtons() {
+  update.state.disabled = false;
+  remove.state.disabled = false;
+}
+
+function getSelectedOption() {
+  const selected = list.value;
+  for (var option in $$(option)) {
+    if (option.value == selected) {
+      return option;
+      break;
+    }
+  }
+}
+
+event click $(option) (evt) {
+  const [match, surname, name] = this.value.match(/(\w+), (\w+)/);
+  firstName.value = name;
+  lastName.value = surname;
+  update.state.disabled = false;
+  remove.state.disabled = false;
+  return true;
+}
+
+prefix << event change {
+  const string = prefix.value;
+  const regExp = new RegExp(String.$(^{string}));
+  for (var option in $$(option)) {
+    option.style#visibility = regExp.test(option.value) ? 'visible' : 'none';
+  }
+  maybeDisableButtons();
+}
+
+create << event click {
+  const name = firstName.value;
+  const surname = lastName.value;
+  const value = String.$({surname}, {name});
+  list.$append(<option>{value}</option>);
+  list.value = value;
+  enabledButtons();
+}
+
+update << event click {
+  const selected = list.value;
+  const item = getSelectedOption();
+  const name = firstName.value;
+  const surname = lastName.value;
+  item.text = String.$({surname}, {name});
+}
+
+remove << event click {
+  getSelectedOption().remove();
+  maybeDisableButtons();
+}

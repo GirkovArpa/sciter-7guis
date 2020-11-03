@@ -1,0 +1,35 @@
+<html window-resizable=false>
+
+  <head>
+    <title>CRUD</title>
+    <link href="styles.css" rel="stylesheet">
+    <script src="../common.tis"></script>
+    <script src="script.tis"></script>
+  </head>
+
+  <body>
+    <div.row>
+      <div.col>
+        <div.row>
+          <label>Filter prefix:</label><input|text#prefix />
+        </div>
+        <select|list>
+          <option>Emil, Hans</option>
+          <option>Mustermann, Max</option>
+          <option>Tisch, Roman</option>
+        </select>
+      </div>
+      <div.col>
+        <div.row><label>Name:</label><input|text#firstname value="John" /></div>
+        <div.row><label>Surname:</label><input|text#lastname value="Romba" /></div>
+      </div>
+    </div>
+
+    <div.row>
+      <div.col.buttons>
+        <button#create>Create</button><button#update>Update</button><button#delete>Delete</button>
+      </div>
+    </div>
+  </body>
+
+</html>
