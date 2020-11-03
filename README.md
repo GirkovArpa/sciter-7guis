@@ -6,7 +6,7 @@ Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter
 
 ## Counter
 
-:construction: Not yet implemented. :construction:
+![screenshot](screenshots/counter.gif)
 
 ## Temperature Converter
 
@@ -23,8 +23,6 @@ Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter
 ## CRUD
 
 :construction: Not yet implemented. :construction:
-
-![screenshot](screenshots/crud.png)
 
 ## Circle Drawer
 
