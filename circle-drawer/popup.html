@@ -7,8 +7,10 @@
       const y = view.parameters.y;
       $(h4).html = String.$(Adjust diameter of circle at ({x}, {y}).);
 
-      $(input|hslider) << event change {
-        view.parameters.callback();
+      const slider = $(input|hslider);
+
+      slider << event change {
+        view.parameters.callback(slider.value);
       }
     </script>
     <style>
@@ -27,7 +29,7 @@
 
   <body>
     <center><h4>Adjust diameter of circle at (x, y).</h4><br></center>
-    <center><input|hslider min="0" max="255"/></center>
+    <center><input|hslider value="10" /></center>
   </body>
 
 </html>

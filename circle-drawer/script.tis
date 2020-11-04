@@ -6,7 +6,7 @@ var highlightedCircle = null;
 function draw(context) {
   context.strokeWidth(1);
   context.strokeColor(color(0, 0, 0));
-  context.fillColor(color(255, 255, 255));
+  context.fillColor(color(255, 255, 255, 0));
   for (var circle in circles) {
     context.fillColor(circle.color);
     context.drawPath(circle.path);
@@ -16,7 +16,7 @@ function draw(context) {
 canvas << event click (evt) {
   const path = new Graphics.Path();
   path.arc(evt.x.toFloat(), evt.y.toFloat(), 10.0, 10.0, 10.0);
-  const circle = { x: evt.x, y: evt.y, path: path, color: color(255, 255, 255) };
+  const circle = { x: evt.x, y: evt.y, path: path, color: color(255, 255, 255, 0) };
   circles.push(circle);
 
   canvas.paintContent = draw;
@@ -32,7 +32,7 @@ canvas << event mousemove (evt) {
       highlightedCircle = circle;
       canvas.style.set { "context-menu": "selector(menu)" };
     } else {
-      circle.color = color(255, 255, 255);
+      circle.color = color(255, 255, 255, 0);
     }
   }
   if (!oneIsSelected) {
@@ -42,15 +42,20 @@ canvas << event mousemove (evt) {
 }
 
 $(li) << event click { 
+  const circle = highlightedCircle;
   const popup = view.window({ 
     type: View.TOOL_WINDOW,
     state: View.WINDOW_SHOWN,
     url: 'popup.html',
     parameters: { 
-      x: highlightedCircle.x, 
-      y: highlightedCircle.y, 
-      callback: function() {
-        canvas.style.set { "background": "red" };
+      x: circle.x, 
+      y: circle.y, 
+      callback: function(sliderValue) {
+        const val = sliderValue.toFloat();
+        const path = new Graphics.Path();
+        path.arc(circle.x, circle.y, val, val, val);
+        circle.path = path;
+        canvas.refresh();
       }
     },
   });
