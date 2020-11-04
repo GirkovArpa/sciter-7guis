@@ -3,6 +3,14 @@ const canvas = $(#canvas);
 const stackUndo = [];
 const stackRedo = [];
 
+stackUndo.addObserver(function (changeDefinition) {
+  $(#undo).state.disabled = stackUndo.length ? false : true;
+});
+
+stackRedo.addObserver(function (changeDefinition) {
+  $(#redo).state.disabled = stackRedo.length ? false : true;
+});
+
 const circles = [];
 var highlightedCircle = null;
 var currentPopup = null;
@@ -23,17 +31,30 @@ canvas << event click (evt) {
     currentPopup = null;
     return;
   }
-  const path = new Graphics.Path();
-  path.arc(evt.x.toFloat(), evt.y.toFloat(), 10.0, 10.0, 10.0);
-  const circle = { x: evt.x, y: evt.y, radius: 10.0, path: path, color: color(255, 255, 255, 0) };
-  circles.push(circle);
 
+  stackRedo.length = 0;
+
+  const path = new Graphics.Path();
+  const x = evt.x.toFloat();
+  const y = evt.y.toFloat();
+  path.arc(x, y, 10.0, 10.0, 10.0);
+  const circle = { x: x, y: y, radius: 10.0, path: path, color: color(255, 255, 255, 0) };
+  circles.push(circle);
   canvas.paintContent = draw;
   canvas.refresh();
 
-  stackUndo.push(function() {
-    circles.pop();
-    canvas.refresh();
+  stackUndo.push(function(redo) {
+    if (!redo) {
+      circles.pop();
+      canvas.refresh();
+    } else {
+      const path = new Graphics.Path();
+      path.arc(x, y, 10.0, 10.0, 10.0);
+      const circle = { x: x, y: y, radius: 10.0, path: path, color: color(255, 255, 255, 0) };
+      circles.push(circle);
+      canvas.paintContent = draw;
+      canvas.refresh();
+    }
   });
 };
 
@@ -60,18 +81,13 @@ $(li) << event click {
   if (currentPopup != null) return;
 
   const circle = highlightedCircle;
+  const index = circles.length - 1;
 
   const lastX = circle.x;
   const lastY = circle.y;
   const lastR = circle.radius;
 
-  stackUndo.push(function () {
-    const path = new Graphics.Path();
-    path.arc(lastX, lastY, lastR, lastR, lastR);
-    circle.path = path;
-    circle.radius = lastR;
-    canvas.refresh();
-  });
+  let newR = 0;
 
   currentPopup = view.window({ 
     type: View.TOOL_WINDOW,
@@ -86,14 +102,47 @@ $(li) << event click {
         path.arc(circle.x, circle.y, val, val, val);
         circle.path = path;
         circle.radius = val;
+        newR = val;
         canvas.refresh();
       }
     },
   });
-  currentPopup.on("close", ::currentPopup = null);
+  currentPopup.on("close", function() {
+    currentPopup = null;
+    stackRedo.length = 0;
+    $(#redo).state.disabled = true;
+    $(#undo).state.disabled = false;
+    stackUndo.push(function (redo) {
+      if (!redo) {
+        const circle = circles[index];
+        const path = new Graphics.Path();
+        path.arc(lastX, lastY, lastR, lastR, lastR);
+        circle.path = path;
+        circle.radius = lastR;
+        canvas.refresh();
+      } else {
+        const circle = circles[index];
+        const path = new Graphics.Path();
+        path.arc(lastX, lastY, newR, newR, newR);
+        circle.path = path;
+        circle.radius = newR;
+        canvas.refresh();
+      }
+    });
+
+  });
   canvas.style.set { "context-menu": "selector(null)" };
+
 }
 
 $(#undo) << event click {
-  stackUndo.pop()();
+  const func = stackUndo.pop();
+  func(false);
+  stackRedo.push(func);
+}
+
+$(#redo) << event click {
+  const func = stackRedo.pop();
+  func(true);
+  stackUndo.push(func);
 }

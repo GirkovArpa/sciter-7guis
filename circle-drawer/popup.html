@@ -3,8 +3,8 @@
   <head>
     <script src="../common.tis"></script>
     <script type="text/tiscript">
-      const x = view.parameters.x;
-      const y = view.parameters.y;
+      const x = view.parameters.x.toInteger();
+      const y = view.parameters.y.toInteger();
       $(h4).html = String.$(Adjust diameter of circle at ({x}, {y}).);
 
       const slider = $(input|hslider);
