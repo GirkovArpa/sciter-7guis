@@ -1,0 +1,17 @@
+const table = $(table);
+
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+$(thead > tr).$append(<th> </th>);
+
+for (var (i, letter) of alphabet) {
+  $(thead > tr).$append(<th>{letter}</th>);
+}
+
+for (var i = 0; i < 100; i++) {
+  const tr = $(tbody).$append(<tr></tr>);
+  tr.$append(<td>{i}</td>);
+  for (var j = 0; j < alphabet.length; j++) {
+    tr.$append(<td></td>);
+  }
+}
