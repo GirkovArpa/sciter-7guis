@@ -28,7 +28,7 @@ Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter
 
 ## Circle Drawer
 
-:construction: Not yet implemented. :construction:
+![screenshot](screenshots/circle-drawer.gif)
 
 ## Cells
 

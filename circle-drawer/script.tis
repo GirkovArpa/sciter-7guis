@@ -32,7 +32,7 @@ canvas << event click (evt) {
     return;
   }
 
-  stackRedo.length = 0;
+  //stackRedo.length = 0;
 
   const path = new Graphics.Path();
   const x = evt.x.toFloat();
@@ -81,10 +81,8 @@ $(li) << event click {
   if (currentPopup != null) return;
 
   const circle = highlightedCircle;
-  const index = circles.length - 1;
+  const index = circles.indexOf(circle);
 
-  const lastX = circle.x;
-  const lastY = circle.y;
   const lastR = circle.radius;
 
   let newR = 0;
@@ -109,23 +107,20 @@ $(li) << event click {
   });
   currentPopup.on("close", function() {
     currentPopup = null;
-    stackRedo.length = 0;
-    $(#redo).state.disabled = true;
-    $(#undo).state.disabled = false;
     stackUndo.push(function (redo) {
       if (!redo) {
-        const circle = circles[index];
+        const _circle = circles[index];
         const path = new Graphics.Path();
-        path.arc(lastX, lastY, lastR, lastR, lastR);
-        circle.path = path;
-        circle.radius = lastR;
+        path.arc(_circle.x, _circle.y, lastR, lastR, lastR);
+        _circle.path = path;
+        _circle.radius = lastR;
         canvas.refresh();
       } else {
-        const circle = circles[index];
+        const _circle = circles[index];
         const path = new Graphics.Path();
-        path.arc(lastX, lastY, newR, newR, newR);
-        circle.path = path;
-        circle.radius = newR;
+        path.arc(_circle.x, _circle.y, newR, newR, newR);
+        _circle.path = path;
+        _circle.radius = newR;
         canvas.refresh();
       }
     });
