@@ -14,7 +14,7 @@ Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter
 
 ## Flight Booker
 
-:construction: Under construction (indefinitely). :construction:
+:construction: Under construction. :construction:
 
 ![screenshot](screenshots/flight-booker.png)
 
@@ -32,4 +32,6 @@ Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter
 
 ## Cells
 
-:construction: Not yet implemented. :construction:
+:construction: Under construction. :construction:
+
+![screenshot](screenshots/cells.gif)

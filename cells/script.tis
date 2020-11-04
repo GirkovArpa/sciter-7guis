@@ -1,17 +1,59 @@
 const table = $(table);
-
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 $(thead > tr).$append(<th> </th>);
-
 for (var (i, letter) of alphabet) {
   $(thead > tr).$append(<th>{letter}</th>);
+}
+
+function onHover(td) {
+  if (!td.canHover) return;
+  td.canHover = false;
+  td.style.set { padding: 0 };
+  const text = td.html;
+  td.html = "";
+  const textbox = td.$append(<input|text value={text}>);
+  textbox.state.focus = true;
+  
+  var editingFormula = false;
+
+  textbox.on("focusout", function() {
+    const dependencies = textbox.value.match(/\d+[A-Z]/g) || [];
+    const formula = textbox.value.replace(/\d+[A-Z]/g, "self.select('#$&').html.toInteger()");
+
+    if (editingFormula) {
+      td.formula = formula;
+      let result = "ERROR";
+      try { result = eval(formula).toString() } catch (e) { stdout.println(e); }
+      td.html = result;
+    } else {
+      td.formula = false;
+      td.html = textbox.value;
+    }
+
+    td.canHover = true;
+
+    textbox.remove();
+
+    for (var cell in $$(td)) {
+      if (cell.formula && cell != td) {
+        cell.html = eval(cell.formula).toString();
+      }
+    }
+
+  });
+
+  textbox.on("dblclick", function() {
+    editingFormula = true;
+  });
 }
 
 for (var i = 0; i < 100; i++) {
   const tr = $(tbody).$append(<tr></tr>);
   tr.$append(<td>{i}</td>);
   for (var j = 0; j < alphabet.length; j++) {
-    tr.$append(<td></td>);
+    const td = tr.$append(<td#{i}{alphabet[j]}></td>);
+    td.on("mouseenter", ::onHover(td));
+    td.canHover = true;
   }
 }

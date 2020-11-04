@@ -20,12 +20,16 @@ td, th {
   width: 50px;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
+input {
+  width: 100px;
+  height: 32px;
+  margin: 0;
+  padding: 0;
+  border: none;
 }
 
-tr:hover {
-  background-color: #ddd;
+tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
 th {
