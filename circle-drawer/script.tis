@@ -1,7 +1,11 @@
 const canvas = $(#canvas);
 
+const stackUndo = [];
+const stackRedo = [];
+
 const circles = [];
 var highlightedCircle = null;
+var currentPopup = null;
 
 function draw(context) {
   context.strokeWidth(1);
@@ -14,16 +18,27 @@ function draw(context) {
 }
 
 canvas << event click (evt) {
+  if (currentPopup != null) {
+    currentPopup.close();
+    currentPopup = null;
+    return;
+  }
   const path = new Graphics.Path();
   path.arc(evt.x.toFloat(), evt.y.toFloat(), 10.0, 10.0, 10.0);
-  const circle = { x: evt.x, y: evt.y, path: path, color: color(255, 255, 255, 0) };
+  const circle = { x: evt.x, y: evt.y, radius: 10.0, path: path, color: color(255, 255, 255, 0) };
   circles.push(circle);
 
   canvas.paintContent = draw;
   canvas.refresh();
+
+  stackUndo.push(function() {
+    circles.pop();
+    canvas.refresh();
+  });
 };
 
 canvas << event mousemove (evt) {
+  if (currentPopup != null) return;
   var oneIsSelected = false;
   for (var circle in circles) {
     if (circle.path.isPointInside(evt.x.toFloat(), evt.y.toFloat()) && !oneIsSelected) {
@@ -42,8 +57,23 @@ canvas << event mousemove (evt) {
 }
 
 $(li) << event click { 
+  if (currentPopup != null) return;
+
   const circle = highlightedCircle;
-  const popup = view.window({ 
+
+  const lastX = circle.x;
+  const lastY = circle.y;
+  const lastR = circle.radius;
+
+  stackUndo.push(function () {
+    const path = new Graphics.Path();
+    path.arc(lastX, lastY, lastR, lastR, lastR);
+    circle.path = path;
+    circle.radius = lastR;
+    canvas.refresh();
+  });
+
+  currentPopup = view.window({ 
     type: View.TOOL_WINDOW,
     state: View.WINDOW_SHOWN,
     url: 'popup.html',
@@ -55,8 +85,15 @@ $(li) << event click {
         const path = new Graphics.Path();
         path.arc(circle.x, circle.y, val, val, val);
         circle.path = path;
+        circle.radius = val;
         canvas.refresh();
       }
     },
   });
+  currentPopup.on("close", ::currentPopup = null);
+  canvas.style.set { "context-menu": "selector(null)" };
+}
+
+$(#undo) << event click {
+  stackUndo.pop()();
 }
