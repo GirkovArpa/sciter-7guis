@@ -16,7 +16,7 @@ Run the implementations by placing [scapp.exe](https://github.com/c-smile/sciter
 
 :construction: Under construction (indefinitely). :construction:
 
-![screenshot](screenshots/flight-booker.gif)
+![screenshot](screenshots/flight-booker.png)
 
 ## Timer
 
